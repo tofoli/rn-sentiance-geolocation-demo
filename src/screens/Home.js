@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, Platform, View, Text, Button, SectionList, NativeEventEmitter, TouchableOpacity, Clipboard } from 'react-native';
+import { StyleSheet, Platform, View, Text, Button, SectionList, NativeEventEmitter, TouchableOpacity, Clipboard, Switch } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import RNSentiance from 'react-native-sentiance';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import Permissions from 'react-native-permissions';
-import Task from '../task';
+import GeolocationTask from '../task/GeolocationTask';
+import SentianceTask from '../task/SentianceTask';
 
 export default class Home extends PureComponent {
   static navigationOptions = {
@@ -12,6 +13,8 @@ export default class Home extends PureComponent {
   };
 
   state = {
+    sentianceEnabled: true,
+    geolocationEnabled: true,
     userName: '',
     sentianceId: '',
     sentianceVersion: '',
@@ -21,11 +24,28 @@ export default class Home extends PureComponent {
   }
 
   async componentDidMount() {
-    let newState = { ...this.state };
-    Task.listeners();
-    Task.schedule();
+    const sentianceEmitter = new NativeEventEmitter(RNSentiance);
+    this.subSDKStatusUpdate = sentianceEmitter.addListener(
+      'SDKStatusUpdate',
+      status => this.setState({ status: this._sentianceStatusToArray(status) })
+    );
 
-    newState.userName = await AsyncStorage.getItem('@auth/userName');
+    let newState = { ...this.state };
+    SentianceTask.listeners();
+    GeolocationTask.listeners();
+
+    await Permissions.request('location', { type: 'always' });
+    if (Platform.OS === 'ios')
+      await Permissions.request('motion');
+
+    newState.sentianceEnabled = JSON.parse(await AsyncStorage.getItem('@auth/sentianceDisabled') || 'true');
+    newState.geolocationEnabled = JSON.parse(await AsyncStorage.getItem('@auth/geolocationDisabled') || 'true');
+
+    if (newState.sentianceEnabled)
+      SentianceTask.schedule();
+
+    if (newState.geolocationEnabled)
+      GeolocationTask.schedule();
 
     if (await RNSentiance.isInitialized()) {
       newState.sentianceId = await RNSentiance.getUserId();
@@ -39,16 +59,6 @@ export default class Home extends PureComponent {
     newState.geolocationStatus = this._sentianceStatusToArray(await BackgroundGeolocation.getState());
 
     this.setState(newState);
-
-    const sentianceEmitter = new NativeEventEmitter(RNSentiance);
-    this.subSDKStatusUpdate = sentianceEmitter.addListener(
-      'SDKStatusUpdate',
-      status => this.setState({ status: this._sentianceStatusToArray(status) })
-    );
-
-    await Permissions.request('location', { type: 'always' });
-    if (Platform.OS === 'ios')
-      await Permissions.request('motion');
   }
 
   _logoff = async () => {
@@ -62,8 +72,38 @@ export default class Home extends PureComponent {
     value: String(status[key]),
   }));
 
+  _sentianceSwitch = async () => {
+    const { sentianceEnabled } = this.state;
+    if (sentianceEnabled) { // Is being disabled
+      await SentianceTask.cancel();
+    } else {
+      await SentianceTask.schedule();
+    }
+
+    await AsyncStorage.setItem('@auth/sentianceDisabled', JSON.stringify(!sentianceEnabled))
+    this.setState({ sentianceEnabled: !sentianceEnabled });
+  };
+
+  _geolocationSwitch = async () => {
+    const { geolocationEnabled } = this.state;
+    console.log(geolocationEnabled);
+    if (geolocationEnabled) { // Is being disabled
+      await GeolocationTask.cancel();
+    } else {
+      await GeolocationTask.schedule();
+    }
+
+    await AsyncStorage.setItem('@auth/geolocationDisabled', JSON.stringify(!geolocationEnabled))
+    this.setState({ geolocationEnabled: !geolocationEnabled });
+  };
+
   render() {
-    const { userName, sentianceId, sentianceVersion, sentianceIsInitialized, sentianceStatus, geolocationStatus } = this.state;
+    const {
+      userName, sentianceId, sentianceVersion, sentianceIsInitialized,
+      sentianceStatus, geolocationStatus, sentianceEnabled, geolocationEnabled
+    } = this.state;
+
+    console.log('render', geolocationEnabled);
 
     return (
       <View style={styles.container}>
@@ -73,6 +113,24 @@ export default class Home extends PureComponent {
           <Button
             onPress={this._logoff}
             title="Logoff"
+          />
+        </View>
+
+        <View style={styles.listItem}>
+          <Text style={styles.value}>Sentiance Task</Text>
+
+          <Switch
+            value={sentianceEnabled}
+            onValueChange={this._sentianceSwitch}
+          />
+        </View>
+
+        <View style={styles.listItem}>
+          <Text style={styles.value}>Geolocation Task</Text>
+
+          <Switch
+            value={geolocationEnabled}
+            onValueChange={this._geolocationSwitch}
           />
         </View>
 
@@ -121,7 +179,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     backgroundColor: '#fff',
-    paddingLeft: 20,
+    padding: 20,
     paddingBottom: 10,
     fontSize: 18,
     fontWeight: 'bold',
