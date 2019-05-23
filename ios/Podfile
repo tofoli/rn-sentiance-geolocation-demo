@@ -28,6 +28,10 @@ target 'Sentiance' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
+  # https://github.com/sentiance/react-native-sentiance#ios
+  pod 'RNSentiance', :path => '../node_modules/react-native-sentiance/ios/RNSentiance.podspec'
+  pod 'SENTSDK', :podspec => '../node_modules/react-native-sentiance/ios/SENTSDK.podspec'
+
   target 'SentianceTests' do
     inherit! :search_paths
     # Pods for testing

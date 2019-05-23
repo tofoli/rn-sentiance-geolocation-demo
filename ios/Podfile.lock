@@ -6,6 +6,8 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
+  - React (0.59.8):
+    - React/Core (= 0.59.8)
   - React/Core (0.59.8):
     - yoga (= 0.59.8.React)
   - React/CxxBridge (0.59.8):
@@ -46,6 +48,9 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
+  - RNSentiance (1.2.6):
+    - React
+  - SENTSDK (5.2.0)
   - yoga (0.59.8.React)
 
 DEPENDENCIES:
@@ -59,6 +64,8 @@ DEPENDENCIES:
   - React/RCTNetwork (from `../node_modules/react-native`)
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
+  - RNSentiance (from `../node_modules/react-native-sentiance/ios/RNSentiance.podspec`)
+  - SENTSDK (from `../node_modules/react-native-sentiance/ios/SENTSDK.podspec`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -74,6 +81,10 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   React:
     :path: "../node_modules/react-native"
+  RNSentiance:
+    :path: "../node_modules/react-native-sentiance/ios/RNSentiance.podspec"
+  SENTSDK:
+    :podspec: "../node_modules/react-native-sentiance/ios/SENTSDK.podspec"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -83,8 +94,10 @@ SPEC CHECKSUMS:
   Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
   React: 1d605e098d69bdf08960787f3446f0a9dc2e2ccf
+  RNSentiance: 1b744adcbc375ab8d883db7477ac8d56141846fa
+  SENTSDK: df45dbcc89c54a8b4fe3f6fb4585b90ebaad2c01
   yoga: 128daf064cacaede0c3bb27424b6b4c71052e6cd
 
-PODFILE CHECKSUM: c16ab8dc5d44939e51f7220fabb4a9468baabcdf
+PODFILE CHECKSUM: 7620f25ce9acaa901ce399d9dc73adb08334ee44
 
 COCOAPODS: 1.5.3

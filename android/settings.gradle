@@ -1,3 +1,4 @@
 rootProject.name = 'Sentiance'
-
+include ':react-native-sentiance'
+project(':react-native-sentiance').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-sentiance/android')
 include ':app'
