@@ -36,6 +36,8 @@ target 'Sentiance' do
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
+  pod 'ReactNativePermissions', :path => '../node_modules/react-native-permissions'
+
   target 'SentianceTests' do
     inherit! :search_paths
     # Pods for testing

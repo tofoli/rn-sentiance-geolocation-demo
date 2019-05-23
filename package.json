@@ -12,6 +12,7 @@
     "react-native": "0.59.8",
     "react-native-device-log": "^1.0.2",
     "react-native-gesture-handler": "^1.2.1",
+    "react-native-permissions": "^1.1.1",
     "react-native-sentiance": "^2.2.1",
     "react-navigation": "^3.11.0"
   },

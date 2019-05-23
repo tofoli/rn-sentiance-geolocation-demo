@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, View, Text, Button, SectionList, NativeEventEmitter, TouchableOpacity, Clipboard } from 'react-native';
+import { StyleSheet, Platform, View, Text, Button, SectionList, NativeEventEmitter, TouchableOpacity, Clipboard } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import RNSentiance from 'react-native-sentiance';
+import Permissions from 'react-native-permissions';
 import Task from '../task';
 
 export default class Home extends PureComponent {
@@ -40,6 +41,10 @@ export default class Home extends PureComponent {
       'SDKStatusUpdate',
       status => this.setState({ status: this._sentianceStatusToArray(status) })
     );
+
+    await Permissions.request('location', { type: 'always' });
+    if (Platform.OS === 'ios')
+      await Permissions.request('motion');
   }
 
   _logoff = async () => {
@@ -108,7 +113,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   subtitle: {
-    marginLeft: 20,
+    backgroundColor: '#fff',
+    paddingLeft: 20,
+    paddingBottom: 10,
     fontSize: 18,
     fontWeight: 'bold',
   },
