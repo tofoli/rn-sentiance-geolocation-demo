@@ -94,6 +94,7 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
+	purgeBackgroundGeolocationDebugResources(applicationVariants)
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     compileOptions {
@@ -139,6 +140,9 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-device-info')
+    implementation project(':react-native-background-fetch')
+    implementation project(':react-native-background-geolocation')
     implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-sentiance')
@@ -152,4 +156,17 @@ dependencies {
 task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
+}
+
+// [Added by react-native-background-geolocation] Purge debug sounds from release build.
+def purgeBackgroundGeolocationDebugResources(applicationVariants) {
+    if ((rootProject.ext.has("removeBackgroundGeolocationDebugSoundsInRelease")) && (rootProject.ext.removeBackgroundGeolocationDebugSoundsInRelease == false)) return
+    applicationVariants.all { variant ->
+        if (variant.buildType.name == "release") {
+            println("[react-native-background-geolocation] Purging debug resources in release build")
+            variant.mergeResources.doLast {
+                delete(fileTree(dir: variant.mergeResources.outputDir, includes: ["raw_tslocationmanager*"]))
+            }
+        }
+    }
 }

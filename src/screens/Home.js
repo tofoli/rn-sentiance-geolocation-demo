@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { StyleSheet, Platform, View, Text, Button, SectionList, NativeEventEmitter, TouchableOpacity, Clipboard } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import RNSentiance from 'react-native-sentiance';
+import BackgroundGeolocation from 'react-native-background-geolocation';
 import Permissions from 'react-native-permissions';
 import Task from '../task';
 
@@ -16,6 +17,7 @@ export default class Home extends PureComponent {
     sentianceVersion: '',
     sentianceIsInitialized: '',
     sentianceStatus: [],
+    geolocationStatus: [],
   }
 
   async componentDidMount() {
@@ -33,6 +35,8 @@ export default class Home extends PureComponent {
 
       newState.sentianceStatus = this._sentianceStatusToArray(status);
     }
+
+    newState.geolocationStatus = this._sentianceStatusToArray(await BackgroundGeolocation.getState());
 
     this.setState(newState);
 
@@ -59,7 +63,7 @@ export default class Home extends PureComponent {
   }));
 
   render() {
-    const { userName, sentianceId, sentianceVersion, sentianceIsInitialized, sentianceStatus } = this.state;
+    const { userName, sentianceId, sentianceVersion, sentianceIsInitialized, sentianceStatus, geolocationStatus } = this.state;
 
     return (
       <View style={styles.container}>
@@ -85,7 +89,10 @@ export default class Home extends PureComponent {
                 { key: 'Is Initialized', value: sentianceIsInitialized },
                 ...sentianceStatus,
               ]
-            },
+            }, {
+              title: 'Geolocation Status',
+              data: geolocationStatus,
+            }
           ]}
           renderItem={({ item: { key, value } }) =>
             <TouchableOpacity style={styles.listItem} onPress={() => Clipboard.setString(value)}>

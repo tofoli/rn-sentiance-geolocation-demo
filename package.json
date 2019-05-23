@@ -10,6 +10,8 @@
     "@react-native-community/async-storage": "^1.4.1",
     "react": "16.8.3",
     "react-native": "0.59.8",
+    "react-native-background-geolocation": "^3.0.5",
+    "react-native-device-info": "^2.0.1",
     "react-native-device-log": "^1.0.2",
     "react-native-gesture-handler": "^1.2.1",
     "react-native-permissions": "^1.1.1",

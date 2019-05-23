@@ -4,6 +4,8 @@
 
 import {AppRegistry} from 'react-native';
 import App from './App';
+import Task from './src/task';
 import {name as appName} from './app.json';
 
 AppRegistry.registerComponent(appName, () => App);
+Task.timer();
