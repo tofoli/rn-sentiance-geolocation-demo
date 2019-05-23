@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { createStackNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
 import Home from './Home';
 import Login from './Login';
@@ -11,7 +11,7 @@ const AppStack = createStackNavigator({
   Home,
 });
 
-export default class AppContainer extends Component {
+export default class AppContainer extends PureComponent {
   render() {
     const { isLogged } = this.props;
 

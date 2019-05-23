@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
-export default class Home extends Component {
+export default class Home extends PureComponent {
   static navigationOptions = {
     title: 'Login',
   };
