@@ -2,7 +2,7 @@
 
 ### Purpose
 
-To test the integration of [Sentiance]([https://github.com/sentiance/react-native-sentiance](https://github.com/sentiance/react-native-sentiance)) together with [React Native Background Geolocation]([https://github.com/transistorsoft/react-native-background-geolocation](https://github.com/transistorsoft/react-native-background-geolocation))
+To test the integration of [Sentiance](https://github.com/sentiance/react-native-sentiance) together with [React Native Background Geolocation](https://github.com/transistorsoft/react-native-background-geolocation)
 
 ### Debug
 #### Background Geolocation
