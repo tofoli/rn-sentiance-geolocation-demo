@@ -110,6 +110,13 @@ android {
         versionName "1.0"
         missingDimensionStrategy "sdkVersion", "world"
     }
+    flavorDimensions "region"
+    productFlavors {
+        global {
+            dimension "region"
+            missingDimensionStrategy "sdkVersion", "world"
+        }
+    }
     splits {
         abi {
             reset()

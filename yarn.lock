@@ -5045,10 +5045,10 @@ react-native-scrollable-mixin@^1.0.1:
   resolved "https://registry.yarnpkg.com/react-native-scrollable-mixin/-/react-native-scrollable-mixin-1.0.1.tgz#34a32167b64248594154fd0d6a8b03f22740548e"
   integrity sha1-NKMhZ7ZCSFlBVP0NaosD8idAVI4=
 
-react-native-sentiance@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-sentiance/-/react-native-sentiance-2.2.1.tgz#691d3e1dab70d1c1a0faeb17950b8817e7353535"
-  integrity sha512-5I92Vpg8HzN4Kg19TzDgVU9QQCge2mUDR5OvATQqhNGJevK8LfBz1zCWJAMy1jJbW3+THlx88o4LjYifv00NhA==
+react-native-sentiance@3.0.0-alpha.3:
+  version "3.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/react-native-sentiance/-/react-native-sentiance-3.0.0-alpha.3.tgz#029592c04458e765774e38e07618d47e113fc6dc"
+  integrity sha512-dYRH1IZ++4o4TJTr8l/16gieqam5eEYv+gNiOt5BavXHwXlYGcs45pAVwIp0x/d1id8D6AKdSO38D/eLPJS9PA==
 
 react-native-tab-view@^1.2.0, react-native-tab-view@^1.4.1:
   version "1.4.1"

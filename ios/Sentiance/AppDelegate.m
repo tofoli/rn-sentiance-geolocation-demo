@@ -10,6 +10,8 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import <RNSentiance.h>
+@import SENTSDK;
 
 @implementation AppDelegate
 
@@ -27,6 +29,10 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+
+  RNSentiance *sentiance = [bridge moduleForClass:RNSentiance.class];
+  [self initializeSentianceSdk:launchOptions  sentiance:sentiance];
+
   return YES;
 }
 
@@ -37,6 +43,32 @@
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
+}
+
+- (void) initializeSentianceSdk:( NSDictionary*) launchOptions sentiance:( RNSentiance*)sentiance {
+
+  NSString *APP_ID = @"***";
+  NSString *SECRET = @"***";
+
+  //user linking disabled
+  //SENTConfig *config = [[SENTConfig alloc] initWithAppId:APP_ID secret:SECRET link:nil launchOptions:launchOptions];
+
+
+  //user linking enabled
+  //when user linking is enabled 'SDKMetaUserLink' event will be sent to JS with parameter {installId}
+  //after successfull linking RNSentiance.metaUserLinkCallback(true) must be called form JS otherwise SDK will keep waiting for userlinking to be done
+
+  //uncomment below code if user linking is enabled
+  SENTConfig *config = [[SENTConfig alloc] initWithAppId:APP_ID secret:SECRET link:sentiance.getMetaUserLinker launchOptions:launchOptions];
+
+  [config setDidReceiveSdkStatusUpdate:sentiance.getSdkStatusUpdateHandler];
+
+
+  [[SENTSDK sharedInstance] initWithConfig:config success :^{
+    NSLog(@"initWithConfig Success");
+  } failure:^(SENTInitIssue issue) {
+    NSLog(@"initWithConfig Failure issue: %lu", (unsigned long)issue);
+  }];
 }
 
 @end

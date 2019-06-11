@@ -21,16 +21,24 @@ Is only a string identifier to separate information on the server side
 To view the information, go to `http://tracker.transistorsoft.com/APP_IDENTIFY`
 
 #### Sentiance
-Configure the access keys in the file `src/task/SentianceTask.js`
+Configure the access keys in the files `src/task/SentianceTask.js`
 
-```js
-import  RNSentiance  from  'react-native-sentiance';
-import { NativeEventEmitter } from  'react-native';
-import  AsyncStorage  from  '@react-native-community/async-storage';
-import  Log  from  'react-native-device-log';
+`ios/Sentiance/AppDelegate.m`
+```objc
+- (void) initializeSentianceSdk:( NSDictionary*) launchOptions sentiance:( RNSentiance*)sentiance {
 
-const  APP_ID = '****'; // << -- here
-const  SECRET = '****'; // << -- here
+  NSString *APP_ID = @"***"; // << -- here
+  NSString *SECRET = @"***"; // << -- here
 
-export  default  class  SentianceTask {
+  //user linking disabled
+  //SENTConfig *config = [[SENTConfig alloc] initWithAppId:APP_ID secret:SECRET link:nil launchOptions:launchOptions];
+```
+
+`android/app/src/main/java/com/sentiance/MainApplication.java`
+```java
+public class MainApplication extends Application implements ReactApplication {
+  private static final String SENTIANCE_APP_ID = "***"; // << -- here
+  private static final String SENTIANCE_SECRET = "***"; // << -- here
+
+  private final RNSentiancePackage rnSentiancePackage = new RNSentiancePackage();
 ```

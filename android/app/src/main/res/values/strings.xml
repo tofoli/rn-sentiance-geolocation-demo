@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Sentiance</string>
+    <string name="sentiance_notification_title">Sentiance active</string>
 </resources>
