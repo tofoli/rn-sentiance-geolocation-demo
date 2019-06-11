@@ -21,7 +21,7 @@ Is only a string identifier to separate information on the server side
 To view the information, go to `http://tracker.transistorsoft.com/APP_IDENTIFY`
 
 #### Sentiance
-Configure the access keys in the files `src/task/SentianceTask.js`
+Configure the access keys in the files
 
 `ios/Sentiance/AppDelegate.m`
 ```objc
