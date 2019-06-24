@@ -147,7 +147,9 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-device-info')
+    implementation(project(':react-native-device-info'),  {
+      exclude group: 'com.google.android.gms'
+    })
     implementation project(':react-native-background-fetch')
     implementation project(':react-native-background-geolocation')
     implementation project(':@react-native-community_async-storage')

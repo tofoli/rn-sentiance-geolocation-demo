@@ -3,10 +3,13 @@ import { NativeEventEmitter } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Log from 'react-native-device-log';
 
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 async function saveUserSentiance(userSentianceId) {
   const userId = await AsyncStorage.getItem('@sentiance/userId');
 
   if (userId !== userSentianceId) {
+    Log.info(`📤 Sentiance link user ${userSentianceId}`);
     // post to API
     await AsyncStorage.setItem('@sentiance/userId', userSentianceId);
   }
@@ -27,7 +30,7 @@ export default class SentianceTask {
       'SDKMetaUserLink',
       async event => {
         Log.info('🙉 SDKMetaUserLink', event)
-
+        await saveUserSentiance(event.installId);
         await RNSentiance.metaUserLinkCallback(true);
       }
     );
@@ -41,13 +44,13 @@ export default class SentianceTask {
     }
 
     if (!await RNSentiance.isInitialized()) {
-      Log.i(TAG_LOG, '🛑 Sentiance is not initialized');
+      Log.info('🛑 Sentiance is not initialized');
 
       // The initialization is done by the native code, if it has not yet started, it waits 10 seconds and does shedule again
       await delay(10000);
       return await SentianceTask.schedule();
     } else {
-      Log.i(TAG_LOG, '❇️ Sentiance is initialized');
+      Log.info('❇️ Sentiance is initialized');
     }
 
     Log.info(`🗄 User logged in: ${userName}`);
@@ -63,10 +66,6 @@ export default class SentianceTask {
     } else {
       Log.info('⚛️ Sentiance was already initialized');
     }
-
-    const userSentianceId = await RNSentiance.getUserId();
-    Log.i(TAG_LOG, `⚛️ Sentiance user ${userSentianceId}`);
-    await saveUserSentiance(userSentianceId);
   }
 
   static timer() {}

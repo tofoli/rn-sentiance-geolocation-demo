@@ -92,9 +92,9 @@ public class MainApplication extends Application implements ReactApplication {
         //when user linking is enabled 'SDKMetaUserLink' event will be sent to JS with parameter {installId}
         //after successful linking RNSentiance.metaUserLinkCallback(true) must be called form JS otherwise SDK will keep waiting for user linking to be done
         SdkConfig config = new SdkConfig.Builder(SENTIANCE_APP_ID, SENTIANCE_SECRET, notification)
-                //.setOnSdkStatusUpdateHandler(rnSentiancePackage.getOnSdkStatusUpdateHandler())
+                .setOnSdkStatusUpdateHandler(rnSentiancePackage.getOnSdkStatusUpdateHandler())
                 //uncomment setMetaUserLinker if user linking is enabled for your app
-                //.setMetaUserLinker(rnSentiancePackage.getMetaUserLinker())
+                .setMetaUserLinker(rnSentiancePackage.getMetaUserLinker())
                 .build();
 
         // Initialize  and start  Sentiance SDK.
