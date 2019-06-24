@@ -1,7 +1,16 @@
 import RNSentiance from 'react-native-sentiance';
-import { Platform, NativeEventEmitter } from 'react-native';
+import { NativeEventEmitter } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Log from 'react-native-device-log';
+
+async function saveUserSentiance(userSentianceId) {
+  const userId = await AsyncStorage.getItem('@sentiance/userId');
+
+  if (userId !== userSentianceId) {
+    // post to API
+    await AsyncStorage.setItem('@sentiance/userId', userSentianceId);
+  }
+}
 
 export default class SentianceTask {
   static listeners() {
@@ -19,8 +28,7 @@ export default class SentianceTask {
       async event => {
         Log.info('🙉 SDKMetaUserLink', event)
 
-        if (Platform.OS === 'ios')
-          await RNSentiance.metaUserLinkCallback(true);
+        await RNSentiance.metaUserLinkCallback(true);
       }
     );
   }
@@ -30,6 +38,16 @@ export default class SentianceTask {
     if (!userName) {
       Log.info('🗄 User is offline');
       return await SentianceTask.cancel();
+    }
+
+    if (!await RNSentiance.isInitialized()) {
+      Log.i(TAG_LOG, '🛑 Sentiance is not initialized');
+
+      // The initialization is done by the native code, if it has not yet started, it waits 10 seconds and does shedule again
+      await delay(10000);
+      return await SentianceTask.schedule();
+    } else {
+      Log.i(TAG_LOG, '❇️ Sentiance is initialized');
     }
 
     Log.info(`🗄 User logged in: ${userName}`);
@@ -45,6 +63,10 @@ export default class SentianceTask {
     } else {
       Log.info('⚛️ Sentiance was already initialized');
     }
+
+    const userSentianceId = await RNSentiance.getUserId();
+    Log.i(TAG_LOG, `⚛️ Sentiance user ${userSentianceId}`);
+    await saveUserSentiance(userSentianceId);
   }
 
   static timer() {}
